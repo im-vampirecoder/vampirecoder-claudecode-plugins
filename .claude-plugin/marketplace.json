@@ -1,0 +1,14 @@
+{
+  "name": "vampirecoder",
+  "owner": {
+    "name": "vampirecoder"
+  },
+  "plugins": [
+    {
+      "name": "vampirecoder-statusline",
+      "source": "./plugins/vampirecoder-statusline",
+      "description": "Two-line Claude Code statusline: model, folder, context, session tokens, usage limits, monthly cost, git"
+    }
+  ],
+  "description": "Private vampirecoder Claude Code plugins"
+}
