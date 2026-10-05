@@ -1,6 +1,6 @@
 # vampirecoder-claudecode-statusline
 
-A private Claude Code plugin that renders a two-line statusline.
+A private Claude Code plugin that renders a two-line statusline and stamps each assistant message with the time it finished.
 
 ```
 🤖 Opus - 📁 ~/Projects/app - ctx ▰▰▰▰▱▱▱▱▱▱ 42% - 🔢 in 98  out 29.8k  cache r/w 5.4M/181.4k  total 5.6M
@@ -12,6 +12,14 @@ A private Claude Code plugin that renders a two-line statusline.
 **Line 2:** logged-in Claude account, this month's cost, 5-hour and weekly usage bars with time until reset, git branch, active plan, lines changed. Running agents and open todos appear as extra rows below when there are any.
 
 Each item on line 2 is hidden when it has nothing to show.
+
+**Message timestamps:** when an assistant message finishes, a line is added under it in your local time:
+
+```
+Done.
+
+🕐 Oct 5, 2026 @ 08:28 PM
+```
 
 ## Install
 
@@ -40,6 +48,10 @@ The statusline itself only reads small cache files in the OS temp dir, so render
 ### Monthly cost
 
 Computed with `npx ccusage claude monthly --since <YYYY-MM>-01 --json`, so it needs network access the first time (npm download and pricing). It is an estimate at API prices, not a bill. Until the first refresh finishes, or if it has never succeeded, the 💰 item is hidden.
+
+### Message timestamps
+
+Uses Claude Code's `MessageDisplay` hook, which can change what is shown for a message as it streams. Only the final chunk of each message gets the stamp, and every assistant message gets one, including short notes written between tool calls. The stamp is display-only: it is not saved with the message and the model never sees it, so it does not appear on messages from before the plugin loaded or when an old conversation is resumed. The time is read from the system clock in your local timezone.
 
 ### Account shown
 
