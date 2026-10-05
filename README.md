@@ -1,6 +1,10 @@
-# vampirecoder-claudecode-statusline
+# vampirecoder-claudecode-plugins
 
-A private Claude Code plugin that renders a two-line statusline and stamps each assistant message with the time it finished.
+A private Claude Code plugin marketplace (`vampirecoder`). Plugins:
+
+- **`vampirecoder-statusline`**: a two-line statusline that also stamps each assistant message with the time it finished. Documented below.
+
+## vampirecoder-statusline
 
 ```
 🤖 Opus - 📁 ~/Projects/app - ctx ▰▰▰▰▱▱▱▱▱▱ 42% - 🔢 in 98  out 29.8k  cache r/w 5.4M/181.4k  total 5.6M
@@ -26,7 +30,7 @@ Done.
 The repo is private, so Claude Code uses your existing `gh` / git credentials.
 
 ```
-/plugin marketplace add im-vampirecoder/vampirecoder-claudecode-statusline
+/plugin marketplace add im-vampirecoder/vampirecoder-claudecode-plugins
 /plugin install vampirecoder-statusline@vampirecoder
 /vampirecoder-statusline:setup
 ```
