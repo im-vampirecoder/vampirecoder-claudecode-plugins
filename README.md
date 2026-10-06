@@ -42,7 +42,7 @@ Then start a new session. `/vampirecoder-statusline:setup` points the `statusLin
 | Piece | What it does |
 | --- | --- |
 | `vampirecoder-claudecode-statusline.cjs` | Reads Claude Code's JSON on stdin and prints the two lines. |
-| `hooks/link-statusline.cjs` (SessionStart) | Keeps the symlink `~/.claude/vampirecoder-statusline` pointing at the plugin's install folder. The folder changes with each version; `statusLine` needs one fixed path. |
+| `hooks/link-statusline.cjs` (SessionStart) | Keeps `~/.claude/vampirecoder-statusline` pointing at the plugin's install folder (symlink; directory junction on Windows; forwarder-folder fallback). The folder changes with each version; `statusLine` needs one fixed path. |
 | `hooks/usage-quota-cache-refresh.cjs` (PostToolUse, UserPromptSubmit, Stop) | Keeps the cached 5hr / weekly usage numbers fresh. |
 | `hooks/monthly-cost-refresh.cjs` (Stop) | Refreshes the cached monthly cost in the background. |
 | `hooks/message-timestamp.cjs` (MessageDisplay) | Appends `🕐 Oct 5, 2026 @ 08:25 PM` (local time) under each assistant message when it finishes. Display-only; the model never sees it. |
