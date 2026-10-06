@@ -7,15 +7,18 @@ A private Claude Code plugin marketplace (`vampirecoder`). Plugins:
 ## vampirecoder-statusline
 
 ```
-🤖 Opus - 📁 ~/Projects/app - ctx ▰▰▰▰▱▱▱▱▱▱ 42% - 🔢 in 98  out 29.8k  cache r/w 5.4M/181.4k  total 5.6M
-👤 me@example.com  💰 month $58.09  5hr ▰▱▱▱▱▱▱▱▱▱ 7% (resets in 0h 24m)  week ▱▱▱▱▱▱▱▱▱▱ 3% (resets in 4d 9h)  🌿 main (+1)  📋 plan-slug  📝 +10 -3
+🤖 Opus - 📁 ~/Projects/app - 🌿 main (+1) - 📝 +10 -3
+ctx ▰▰▰▰▱▱▱▱▱▱ 42% - 🔢 in 98  out 29.8k  cache r/w 5.4M/181.4k  total 5.6M
+👤 me@example.com  💰 month $58.09  5hr ▰▱▱▱▱▱▱▱▱▱ 7% (resets in 0h 24m)  week ▱▱▱▱▱▱▱▱▱▱ 3% (resets in 4d 9h)  📋 plan-slug
 ```
 
-**Line 1:** model, folder, context-window bar, session token totals (input, output, cache read/write, total).
+**Line 1:** model, folder, git branch, lines changed.
 
-**Line 2:** logged-in Claude account, this month's cost, 5-hour and weekly usage bars with time until reset, git branch, active plan, lines changed. Running agents and open todos appear as extra rows below when there are any.
+**Line 2:** context-window bar, session token totals (input, output, cache read/write, total).
 
-Each item on line 2 is hidden when it has nothing to show.
+**Line 3:** logged-in Claude account, this month's cost, 5-hour and weekly usage bars with time until reset, active plan. Running agents and open todos appear as extra rows below when there are any.
+
+Each item is hidden when it has nothing to show.
 
 **Message timestamps:** when an assistant message finishes, a line is added under it in your local time:
 

@@ -1,6 +1,6 @@
 {
   "name": "vampirecoder-statusline",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Two-line statusline: model, folder, context bar, session tokens, 5hr/week usage, monthly cost (ccusage), git, plan, agents, todos",
   "author": {
     "name": "vampirecoder"

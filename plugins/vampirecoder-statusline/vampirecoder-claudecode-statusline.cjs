@@ -4,8 +4,9 @@
 
 /**
  * Claude Code statusline renderer — reads JSON from stdin, writes ANSI lines to stdout.
- * Line 1: model - folder - context bar - session tokens (in/out/cache r/w/total)
- * Line 2: Claude user, month cost (ccusage), 5hr/week usage bars, git, plan, lines changed; agent/todo rows below when active
+ * Line 1: model - folder - git branch - lines changed
+ * Line 2: context bar - session tokens (in/out/cache r/w/total)
+ * Line 3: Claude user, month cost (ccusage), 5hr/week usage bars, plan; agent/todo rows below when active
  */
 
 const { stdin, env } = require('process');
@@ -175,18 +176,10 @@ async function main() {
       ? buildUsageWindows(readUsageCache())
       : [];
 
-    // Line 1: model - folder - context bar - session tokens
+    // Line 1: model - folder - git branch - lines changed
+    // Line 2: context bar - session tokens
+    // Line 3: Claude user, month cost (ccusage), 5hr/week usage bars, plan; then agent/todo rows when active
     const tok = readTokenTotals(data.transcript_path);
-    const parts = [
-      `🤖 ${cyan(modelName)}`,
-      `📁 ${resolveColor('blue')(currentDir)}`,
-      `ctx ${coloredBar(contextPercent, 10)} ${pctColor(contextPercent)(`${contextPercent}%`)}`,
-      tok && `🔢 ${dim('in')} ${formatTokens(tok.input)}  ${dim('out')} ${formatTokens(tok.output)}  ` +
-        `${dim('cache r/w')} ${formatTokens(tok.cacheRead)}/${formatTokens(tok.cacheWrite)}  ${dim('total')} ${formatTokens(tok.total)}`
-    ].filter(Boolean);
-    console.log(parts.join(dim(' - ')));
-
-    // Line 2: Claude user, month cost (ccusage), 5hr/week usage bars, git, plan, lines changed; then agent/todo rows when active
     const ctx = {
       gitBranch: gitInfo?.branch || '', gitUnstaged: gitInfo?.unstaged || 0, gitStaged: gitInfo?.staged || 0,
       gitAhead: gitInfo?.ahead || 0, gitBehind: gitInfo?.behind || 0,
@@ -194,15 +187,30 @@ async function main() {
       linesAdded: data.cost?.total_lines_added || 0,
       linesRemoved: data.cost?.total_lines_removed || 0
     };
+    const section = id => getSectionRenderer(id)(ctx, {}, {});
+    const line1 = [
+      `🤖 ${cyan(modelName)}`,
+      `📁 ${resolveColor('blue')(currentDir)}`,
+      section('git'),
+      section('changes')
+    ].filter(Boolean);
+    console.log(line1.join(dim(' - ')));
+
+    const line2 = [
+      `ctx ${coloredBar(contextPercent, 10)} ${pctColor(contextPercent)(`${contextPercent}%`)}`,
+      tok && `🔢 ${dim('in')} ${formatTokens(tok.input)}  ${dim('out')} ${formatTokens(tok.output)}  ` +
+        `${dim('cache r/w')} ${formatTokens(tok.cacheRead)}/${formatTokens(tok.cacheWrite)}  ${dim('total')} ${formatTokens(tok.total)}`
+    ].filter(Boolean);
+    console.log(line2.join(dim(' - ')));
+
     const claudeUser = readClaudeUser();
     const usageItems = usageWindows.map(w =>
       `${w.label} ${coloredBar(w.percent, 10)} ${pctColor(w.percent)(`${w.percent}%`)}${w.reset ? dim(` (resets in ${w.reset})`) : ''}`);
     const monthlyUsd = readMonthlyCost();
     const monthCost = monthlyUsd == null ? null : `💰 ${dim('month')} $${monthlyUsd.toFixed(2)}`;
-    const section = id => getSectionRenderer(id)(ctx, {}, {});
-    const line2 = [claudeUser && `👤 ${cyan(claudeUser)}`, monthCost, ...usageItems,
-      section('git'), section('plan'), section('changes')].filter(Boolean);
-    if (line2.length > 0) console.log(line2.join('  '));
+    const line3 = [claudeUser && `👤 ${cyan(claudeUser)}`, monthCost, ...usageItems,
+      section('plan')].filter(Boolean);
+    if (line3.length > 0) console.log(line3.join('  '));
     for (const row of renderAgentsLines(transcript, 4, {}, false)) console.log(row);
     const todosLine = renderTodosLine(transcript, 50, {});
     if (todosLine) console.log(todosLine);
